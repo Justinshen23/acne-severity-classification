@@ -1,101 +1,114 @@
 # Acne Severity Classification
 
-Classify facial acne images into **three severity levels** (mild, moderate, severe) using handcrafted features and deep learning. Built for a SAAS data science project with **4,621 labeled images** and a full pipeline from EDA → baselines → CNNs.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Justinshen23/acne-severity-classification/blob/main/notebooks/acne_severity_project.ipynb)
 
-**Course / context:** UC Berkeley SAAS — acne severity classification with ACNE04-derived labels.
+Machine learning pipeline that classifies acne images into **three severity levels** — **mild**, **moderate**, and **severe** — using handcrafted image features and convolutional neural networks.
 
----
-
-## What this README is for
-
-Your **README** is the front page of the repo. Someone (a grader, recruiter, or future you) should understand:
-
-1. **What** the project does  
-2. **How well** it performed (results)  
-3. **How to run** it step by step  
-4. **Where** the data and code live  
-
-You do **not** need every plot in the README — keep it concise and link to the notebook for details. **Do** include headline metrics, setup steps, and the dataset link.
+**4,621 images** · **4 models** · **70/15/15 train/val/test split** · Built for UC Berkeley **SAAS**
 
 ---
 
 ## Results
 
-Test-set performance on the held-out split (**695 images**, 15% of 4,621). *Update the CNN rows with your exact numbers after a full notebook run.*
+All metrics are on the **held-out test set (695 images)** after training on the full dataset.
 
 | Model | Method | Test accuracy |
-|-------|--------|---------------|
-| **Baseline** | Logistic regression (9 engineered features) | **~53.5%** |
-| **CNN v2** | MobileNetV2 + augmentation (frozen backbone) | *run notebook* |
-| **CNN v3** | EfficientNetB0 transfer learning | **~63.7%** |
-| **CNN v4** | Fine-tuned MobileNetV2 (2-phase train) | **best model** — *run notebook* |
+|-------|--------|:-------------:|
+| Baseline | Logistic regression (9 engineered features) | **45.84%** |
+| CNN v2 | MobileNetV2 transfer learning + augmentation | **66.33%** |
+| CNN v3 | EfficientNetB0 transfer learning | **63.74%** |
+| **CNN v4** | **Fine-tuned MobileNetV2 (2-phase training)** | **74.68%** |
 
-Earlier experiments on a smaller subset (~999 images) reached **~64.5%** (CNN v1) vs **~53.5%** (LR), motivating the full 4,621-image pipeline.
+**Best model: CNN v4** — fine-tuned MobileNetV2, exceeding the 70% target.
 
-**Takeaways**
+### Earlier baseline (smaller ~999-image subset)
 
-- Handcrafted features alone are a weak baseline (~53%); CNNs capture visual patterns better.  
-- Class imbalance (severe ≈ 17%) — models use class weights and augmentation.  
-- See the notebook for confusion matrices, training curves, and classification reports.
+| Model | Test accuracy |
+|-------|:-------------:|
+| Logistic regression | 53.50% |
+| CNN v1 (MobileNetV2) | 64.50% |
+
+Scaling to **4,621 images** and stronger CNN training (especially v4) improved performance substantially over these early runs.
+
+### Key findings
+
+- **CNNs outperform handcrafted features** by ~29 points on the full test set (74.68% vs 45.84%).
+- **Fine-tuning** (v4) beats frozen-backbone CNNs (v2, v3) on this task.
+- **Class imbalance** (severe ≈ 17%) is handled with class weights and augmentation.
+- Confusion matrices, per-class metrics, and training curves are in the [notebook](notebooks/acne_severity_project.ipynb).
 
 ---
 
 ## Quick start (Google Colab)
 
-Recommended — GPU + easy data download.
+1. **Open the notebook** → [Open in Colab](https://colab.research.google.com/github/Justinshen23/acne-severity-classification/blob/main/notebooks/acne_severity_project.ipynb)
 
-1. **Open the notebook**  
-   [Open in Colab](https://colab.research.google.com/github/Justinshen23/acne-severity-classification/blob/main/notebooks/acne_severity_project.ipynb)  
-   or: File → Open notebook → GitHub → `Justinshen23/acne-severity-classification`
+2. **Enable GPU** → Runtime → Change runtime type → **T4 GPU** (recommended for CNN cells)
 
-2. **Get the data** (~5.4 GB)  
-   - Download [`datasets_v2.zip`](https://drive.google.com/file/d/1QlSPUP3Hg1298mErNxYm435nQl-F3G1A/view?usp=drive_link) from Google Drive, **or**  
-   - Use the `gdown` cell in [DATASET.md](DATASET.md)
+3. **Download the dataset** (~5.4 GB)  
+   **[datasets_v2.zip on Google Drive](https://drive.google.com/file/d/1QlSPUP3Hg1298mErNxYm435nQl-F3G1A/view?usp=drive_link)**  
+   Or use `gdown` — see [DATASET.md](DATASET.md)
 
-3. **Run top to bottom**  
-   - Setup & imports → unzip data → EDA → train/val/test split → models  
-   - CNN training needs a **GPU** runtime (Runtime → Change runtime type → GPU)
+4. **Run all cells** top to bottom  
+   - Mount Drive / unzip → EDA → create `unified/` split → train models → evaluate
 
-4. **Optional:** upload a test image in the final cell to try the fine-tuned model.
+5. **Try inference** — run the final upload cell with your own image (uses CNN v4)
 
 ---
 
-## Pipeline overview
+## How to run locally
+
+```bash
+git clone https://github.com/Justinshen23/acne-severity-classification.git
+cd acne-severity-classification
+pip install -r requirements.txt
+```
+
+Download and unzip `datasets_v2.zip` ([Drive link](https://drive.google.com/file/d/1QlSPUP3Hg1298mErNxYm435nQl-F3G1A/view?usp=drive_link)) into `./datasets/` — see [DATASET.md](DATASET.md).
+
+```bash
+jupyter notebook notebooks/acne_severity_project.ipynb
+```
+
+---
+
+## Pipeline
 
 ```
 datasets_v2.zip
        ↓
-  created_dataset/     (Level_0, Level_1, Level_2)
+created_dataset/  (Level_0 · Level_1 · Level_2)
        ↓
-  Feature extraction → EDA (distributions, PCA, outliers)
+Feature extraction + EDA
        ↓
-  unified/ train · val · test   (70% / 15% / 15%)
+unified/  →  train (70%) · val (15%) · test (15%)
        ↓
-  ┌─────────────────────────────────────────────┐
-  │ Baseline LR  →  CNN v2  →  v3  →  v4 (best) │
-  └─────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────┐
+│  Baseline LR  →  CNN v2  →  CNN v3  →  CNN v4   │
+│                              (best: 74.68%)      │
+└──────────────────────────────────────────────────┘
 ```
 
-| Stage | What happens |
-|-------|----------------|
-| **EDA** | Class balance, sample images, feature histograms, correlation, pairplot, PCA, outliers |
-| **Baseline** | 9 features (brightness, redness, ratios, log-edges, …) + logistic regression |
-| **CNN v2** | MobileNetV2, frozen backbone, heavy augmentation |
-| **CNN v3** | EfficientNetB0, different preprocessing scale |
-| **CNN v4** | MobileNetV2 fine-tuned in two phases (higher capacity head + unfreeze) |
+| Step | Contents |
+|------|----------|
+| **EDA** | Class distribution, sample images, feature histograms, correlation, pairplot, PCA, outlier detection |
+| **Baseline** | Brightness, redness, saturation, contrast, edges, gradient + engineered ratios |
+| **CNN v2** | Frozen MobileNetV2, heavy augmentation |
+| **CNN v3** | EfficientNetB0, ImageNet preprocessing |
+| **CNN v4** | Two-phase MobileNetV2: train head → unfreeze top layers → fine-tune |
 
 ---
 
 ## Dataset
 
-| Class | Folder | Images |
-|-------|--------|--------|
-| Mild | `Level_0` | 1,763 |
-| Moderate | `Level_1` | 2,083 |
-| Severe | `Level_2` | 775 |
-| **Total** | | **4,621** |
+| Class | Folder | Images | Share |
+|-------|--------|--------|-------|
+| Mild | `Level_0` | 1,763 | 38.2% |
+| Moderate | `Level_1` | 2,083 | 45.1% |
+| Severe | `Level_2` | 775 | 16.8% |
+| **Total** | | **4,621** | |
 
-After unzip:
+**Layout after unzip:**
 
 ```
 datasets/
@@ -103,38 +116,17 @@ datasets/
 │   ├── Level_0/
 │   ├── Level_1/
 │   └── Level_2/
-└── unified/          # created by the notebook
+└── unified/              # created by notebook
     ├── train/
     ├── val/
     └── test/
 ```
 
-- **Full zip:** [Google Drive](https://drive.google.com/file/d/1QlSPUP3Hg1298mErNxYm435nQl-F3G1A/view?usp=drive_link) (~5.4 GB)  
-- **Demo images in repo:** [`data/sample/`](data/sample/) (9 images)  
-- **Details:** [DATASET.md](DATASET.md)
-
----
-
-## Models (summary)
-
-| Model | Approach |
-|-------|----------|
-| **Baseline** | Logistic regression on 9 engineered features |
-| **CNN v2** | MobileNetV2 transfer learning |
-| **CNN v3** | EfficientNetB0 transfer learning |
-| **CNN v4** | Fine-tuned MobileNetV2 (best performance) |
-
----
-
-## Local setup (optional)
-
-```bash
-git clone https://github.com/Justinshen23/acne-severity-classification.git
-cd acne-severity-classification
-pip install -r requirements.txt
-# Download datasets_v2.zip (see DATASET.md) and unzip into ./datasets/
-jupyter notebook notebooks/acne_severity_project.ipynb
-```
+| Resource | Link |
+|----------|------|
+| **Full dataset** (~5.4 GB) | [Google Drive — datasets_v2.zip](https://drive.google.com/file/d/1QlSPUP3Hg1298mErNxYm435nQl-F3G1A/view?usp=drive_link) |
+| **Demo images** (9 files) | [`data/sample/`](data/sample/) |
+| **Setup guide** | [DATASET.md](DATASET.md) |
 
 ---
 
@@ -142,30 +134,37 @@ jupyter notebook notebooks/acne_severity_project.ipynb
 
 ```
 acne-severity-classification/
-├── README.md              # you are here
-├── DATASET.md             # download & unzip instructions
+├── README.md
+├── DATASET.md
 ├── requirements.txt
 ├── .gitignore
-├── data/sample/           # 9 demo images
+├── data/sample/                 # 9 demo images (3 per class)
 └── notebooks/
     └── acne_severity_project.ipynb
 ```
 
 ---
 
-## Limitations & bias
+## Requirements
 
-Documented in the notebook — summary:
+- Python 3.8+
+- See [`requirements.txt`](requirements.txt): `numpy`, `pandas`, `matplotlib`, `seaborn`, `opencv-python-headless`, `scikit-learn`, `tensorflow`
+- **GPU** recommended for CNN training (Colab T4 works well)
 
-- Not a random clinical sample (ACNE04 / IGA-style labels, East Asian–heavy sources).  
-- Severe class underrepresented (~17%).  
-- Studio/clinical lighting ≠ real-world selfies.  
-- Merged grading scales may add label noise.
+---
 
-Test accuracy may **overstate** real-world performance.
+## Limitations
+
+- **Sampling bias** — ACNE04 / IGA-style labels; not a random global clinical population.
+- **Geographic bias** — predominantly East Asian subjects in source datasets.
+- **Severity imbalance** — severe cases underrepresented (16.8%).
+- **Image conditions** — clinical/controlled photos vs real-world selfies.
+- **Label noise** — merged grading scales (Hayashi + IGA).
+
+Reported test accuracy may not fully generalize to deployment settings.
 
 ---
 
 ## Author
 
-**Justin Shen** — [@Justinshen23](https://github.com/Justinshen23)
+**Justin Shen** · GitHub [@Justinshen23](https://github.com/Justinshen23)
