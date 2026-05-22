@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.env
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data & models (don't commit large files)
+*.zip
+*.keras
+*.h5
+*.pkl
+data/
+datasets/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Colab / secrets
+kaggle.json
