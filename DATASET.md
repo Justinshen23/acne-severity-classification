@@ -42,48 +42,33 @@ The repo `.gitignore` already blocks `*.zip`, `data/`, and `datasets/` so you do
 
 ---
 
-## Recommended: host the zip on Google Drive
+## Download full dataset (Google Drive)
 
-This matches your notebook (Drive mount + unzip).
+**`datasets_v2.zip`** (~5.4 GB, 4,621 images):
 
-### Step 1 — Upload once
+**[Download datasets_v2.zip on Google Drive](https://drive.google.com/file/d/1QlSPUP3Hg1298mErNxYm435nQl-F3G1A/view?usp=drive_link)**
 
-1. Open [Google Drive](https://drive.google.com).
-2. Upload **`datasets_v2.zip`** from:
-   ```
-   Downloads/SAAS Project - Acne - Justin Shen/datasets_v2.zip
-   ```
-3. Right‑click the file → **Share** → **Anyone with the link** → **Viewer**.
-4. Copy the link. It looks like:
-   ```
-   https://drive.google.com/file/d/FILE_ID_HERE/view?usp=sharing
-   ```
+Share setting: anyone with the link can view.
 
-### Step 2 — Paste your link below (then commit)
+### Option A — Colab (mount Drive)
 
-**Download link:** `TODO — paste Google Drive share link for datasets_v2.zip`
-
-### Step 3 — Document on GitHub (optional)
-
-After you have the link above, update `README.md` if you want, then:
-
-```bash
-cd /Users/justinshen/acne-severity-classification
-git add README.md DATASET.md
-git commit -m "Add dataset download instructions"
-git push
-```
-
-### Step 4 — Download in Colab (optional helper cell)
+If the file is in your Drive, mount and unzip as in the notebook:
 
 ```python
-# Run after mounting Drive, OR use gdown with a public link:
-# !pip install -q gdown
-# !gdown --fuzzy "YOUR_GOOGLE_DRIVE_SHARE_LINK"
-# !unzip -q datasets_v2.zip -d /content/datasets/
+from google.colab import drive
+drive.mount('/content/drive')
+# unzip from MyDrive/datasets_v2.zip → /content/datasets/
 ```
 
-If the zip is already in Drive as `MyDrive/datasets_v2.zip`, the existing notebook cells are enough.
+### Option B — Colab or local (`gdown`)
+
+```python
+!pip install -q gdown
+!gdown --fuzzy "https://drive.google.com/file/d/1QlSPUP3Hg1298mErNxYm435nQl-F3G1A/view?usp=drive_link"
+!mkdir -p /content/datasets && unzip -q datasets_v2.zip -d /content/datasets/
+```
+
+File ID (for scripts): `1QlSPUP3Hg1298mErNxYm435nQl-F3G1A`
 
 ---
 

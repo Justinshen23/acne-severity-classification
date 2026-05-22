@@ -33,14 +33,9 @@ datasets/
 
 ### Download full dataset
 
-1. Upload `datasets_v2.zip` from your machine to [Google Drive](https://drive.google.com):
-   ```
-   ~/Downloads/SAAS Project - Acne - Justin Shen/datasets_v2.zip
-   ```
-2. Share → **Anyone with the link** → Viewer  
-3. Paste the link in [DATASET.md](DATASET.md) under **Download link** (for you and collaborators)
+**[datasets_v2.zip on Google Drive](https://drive.google.com/file/d/1QlSPUP3Hg1298mErNxYm435nQl-F3G1A/view?usp=drive_link)** (~5.4 GB)
 
-In Colab, mount Drive and unzip as in the notebook, or follow the `gdown` option in [DATASET.md](DATASET.md).
+See [DATASET.md](DATASET.md) for Colab (`gdown`) and unzip steps.
 
 **Do not commit** the full zip or `datasets/` folder — blocked by `.gitignore` (GitHub 100 MB/file limit).
 

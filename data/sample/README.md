@@ -10,4 +10,4 @@ Nine example images (3 per severity level) so the repo shows real data without u
 
 ## Full dataset
 
-Download **`datasets_v2.zip`** (~5.4 GB) using the instructions in [DATASET.md](../../DATASET.md) (Google Drive link in main README).
+Download **`datasets_v2.zip`** (~5.4 GB): [Google Drive](https://drive.google.com/file/d/1QlSPUP3Hg1298mErNxYm435nQl-F3G1A/view?usp=drive_link) · [DATASET.md](../../DATASET.md)
