@@ -1,0 +1,13 @@
+# Dataset sample (demo only)
+
+Nine example images (3 per severity level) so the repo shows real data without uploading the full 4,621-image set (~5.4 GB).
+
+| Folder | Label | Images here |
+|--------|--------|-------------|
+| `Level_0/` | Mild | 3 |
+| `Level_1/` | Moderate | 3 |
+| `Level_2/` | Severe | 3 |
+
+## Full dataset
+
+Download **`datasets_v2.zip`** (~5.4 GB) using the instructions in [DATASET.md](../../DATASET.md) (Google Drive link in main README).

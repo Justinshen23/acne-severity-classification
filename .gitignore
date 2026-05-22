@@ -13,7 +13,10 @@ venv/
 *.keras
 *.h5
 *.pkl
-data/
+# Ignore full datasets; keep tiny demo sample
+data/*
+!data/sample/
+!data/sample/**
 datasets/
 
 # OS / IDE
